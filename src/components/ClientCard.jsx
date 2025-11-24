@@ -12,17 +12,17 @@ export default function ClientCard({ client, onClose, onSave }) {
     <div className="client-card">
       <button className="close-btn" onClick={onClose}>X</button>
 
-      {/* 🔵 TÍTULO */}
+      {/* TÍTULO */}
       <h2>{isEditing ? "Editar Cliente" : client.name}</h2>
 
-      {/* 🔵 BOTÓN EDITAR */}
+      {/* BOTÓN EDITAR */}
       {!isEditing && (
         <button className="edit-btn" onClick={() => setIsEditing(true)}>
-          ✏️ Editar cliente
+          Editar cliente
         </button>
       )}
 
-      {/* 🟢 MODO EDICIÓN */}
+      {/* MODO EDICIÓN */}
       {isEditing ? (
         <div className="edit-form">
 
@@ -96,7 +96,7 @@ export default function ClientCard({ client, onClose, onSave }) {
             }
           />
 
-          {/* 🟢 BOTÓN GUARDAR */}
+          {/* BOTÓN GUARDAR */}
           <button
             className="save-btn"
             onClick={() => {

@@ -6,7 +6,7 @@ export const getClients = async () => {
   return res.json();
 };
 
-// 🔥 AÑADE ESTA FUNCIÓN AQUÍ
+
 export const updateClient = async (client) => {
   const res = await fetch(`${API_URL}/clients/${client._id}`, {
     method: "PUT",
