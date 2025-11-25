@@ -5,6 +5,8 @@ import VehiclesPage from "./pages/VehiclesPage";
 import WorkordersPage from "./pages/WorkordersPage";
 import MechanicsPage from "./pages/MechanicsPage";
 import CalendarPage from "./pages/CalendarPage";
+import AuthPage from "./pages/AuthPage";   // 👈 ESTE
+
 import "./App.css";
 
 function App() {
@@ -22,6 +24,8 @@ function App() {
         return <MechanicsPage />;
       case SECTIONS.CALENDAR:
         return <CalendarPage />;
+      case SECTIONS.AUTH:
+        return <AuthPage />;      // 👈 AQUÍ
       default:
         return <p>Selecciona una sección.</p>;
     }

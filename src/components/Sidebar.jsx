@@ -5,6 +5,7 @@ const SECTIONS = {
   WORKORDERS: "workorders",
   CALENDAR: "calendar",
   MECHANICS: "mechanics",
+  AUTH: "auth",
 };
 
 export { SECTIONS };
@@ -70,6 +71,19 @@ export default function Sidebar({ activeSection, onChangeSection }) {
           Mecánicos
         </button>
       </nav>
+
+      <div className="sidebar-footer">
+        <button
+          className={
+            activeSection === SECTIONS.AUTH
+              ? "menu-btn auth-btn active"
+              : "menu-btn auth-btn"
+          }
+          onClick={() => onChangeSection(SECTIONS.AUTH)}
+        >
+          Iniciar sesión
+        </button>
+      </div>
     </aside>
   );
 }
