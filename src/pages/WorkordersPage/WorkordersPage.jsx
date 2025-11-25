@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getWorkorders } from "../services/api";
+import { getWorkorders } from "../../services/api";
 
 export default function WorkordersPage() {
   const [workorders, setWorkorders] = useState([]);

@@ -1,11 +1,11 @@
 import { useState } from "react";
 import Sidebar, { SECTIONS } from "./components/Sidebar";
-import ClientsPage from "./pages/ClientsPage";
-import VehiclesPage from "./pages/VehiclesPage";
-import WorkordersPage from "./pages/WorkordersPage";
-import MechanicsPage from "./pages/MechanicsPage";
-import CalendarPage from "./pages/CalendarPage";
-import AuthPage from "./pages/AuthPage";   // 👈 ESTE
+import ClientsPage from "./pages/ClientsPage/ClientsPage";
+import VehiclesPage from "./pages/VehiclesPage/VehiclesPage";
+import WorkordersPage from "./pages/WorkordersPage/WorkordersPage";
+import MechanicsPage from "./pages/MechanicsPage/MechanicsPage";
+import CalendarPage from "./pages/CalendarPage/CalendarPage";
+import AuthPage from "./pages/AuthPage/AuthPage";   // 👈 ESTE
 
 import "./App.css";
 

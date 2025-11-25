@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { getClients, updateClient } from "../services/api";
-import ClientCard from "../components/ClientCard";
+import { getClients, updateClient } from "../../services/api";
+import ClientCard from "../../components/ClientCard";
 import "./ClientsPage.css";
 
 export default function ClientsPage() {

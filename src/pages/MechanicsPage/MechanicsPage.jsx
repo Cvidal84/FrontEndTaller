@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getMechanics } from "../services/api";
+import { getMechanics } from "../../services/api";
 
 export default function MechanicsPage() {
   const [mechanics, setMechanics] = useState([]);
