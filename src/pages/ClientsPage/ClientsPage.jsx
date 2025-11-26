@@ -51,7 +51,7 @@ export default function ClientsPage() {
 
   return (
     <div className="clients-layout">
-      {/* LISTA IZQUIERDA */}
+      {/*LISTA IZQUIERDA*/}
       <div className="clients-list">
         <h2>Clientes</h2>
 
