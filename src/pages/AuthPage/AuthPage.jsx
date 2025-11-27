@@ -1,8 +1,8 @@
-// src/pages/AuthPage.jsx
+// src/pages/AuthPage/AuthPage.jsx
 import { useState } from "react";
 import "./AuthPage.css";
 
-export default function AuthPage() {
+export default function AuthPage({ onLoginSuccess }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
@@ -30,10 +30,16 @@ export default function AuthPage() {
         return;
       }
 
+      // Guardar token y usuario en localStorage
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", JSON.stringify(data.user));
 
       alert("Sesión iniciada correctamente ✔");
+
+      // Avisar al padre que el login fue exitoso
+      if (onLoginSuccess) {
+        onLoginSuccess();
+      }
     } catch (error) {
       console.error(error);
       setErrorMsg("Error al conectar con el servidor.");
