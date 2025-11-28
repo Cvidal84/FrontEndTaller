@@ -1,7 +1,6 @@
 import { useState } from "react";
 import "./ClientCard.css";
 
-
 export default function ClientCard({ client, onClose, onSave }) {
   const [isEditing, setIsEditing] = useState(false);
   const [form, setForm] = useState(client);
@@ -9,7 +8,7 @@ export default function ClientCard({ client, onClose, onSave }) {
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
-  
+
   const handleSave = () => {
     onSave(form); // Llamar a ClientsPage para guardar
     setIsEditing(false); // Salir del modo edición
@@ -17,37 +16,67 @@ export default function ClientCard({ client, onClose, onSave }) {
 
   return (
     <div className="client-card">
-      
       {/* TÍTULO (Mantenemos el título arriba) */}
       <h2>{isEditing ? "Editar Cliente" : client.name}</h2>
 
       {/* 1. MODO VISUALIZACIÓN DE DATOS (NO BOTONES) */}
       {!isEditing && (
         <>
-          <p><strong>📞 Teléfono:</strong> {client.telephone}</p>
-          {client.email && <p><strong>📧 Email:</strong> {client.email}</p>}
+          <p>
+            <strong>📞 Teléfono:</strong> {client.telephone}
+          </p>
+          {client.email && (
+            <p>
+              <strong>📧 Email:</strong> {client.email}
+            </p>
+          )}
 
           {client.address && (
             <>
-              <p><strong>📍 Dirección:</strong></p>
+              <p>
+                <strong>📍 Dirección:</strong>
+              </p>
               <p>{client.address.street}</p>
-              <p>{client.address.city} ({client.address.zip})</p>
+              <p>
+                {client.address.city} ({client.address.zip})
+              </p>
               <p>{client.address.country}</p>
             </>
           )}
+
+          {/* 2. NUEVA SECCIÓN DE VEHÍCULOS */}
+          <div className="client-vehicles-section">
+            <h3>Vehículos</h3>
+
+            {/* Si hay vehículos, los mostramos */}
+            {client.vehicles && client.vehicles.length > 0 ? (
+              <ul className="vehicle-list">
+                {client.vehicles.map((v, index) => (
+                  <li key={v._id || index} className="vehicle-item">
+                    <strong>{v.plate}</strong> — {v.brand} {v.model}
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="no-data">No hay vehículos registrados.</p>
+            )}
+
+            {/* BOTÓN PARA AÑADIR VEHÍCULO A ESTE CLIENTE */}
+            <button
+              className="add-vehicle-btn"
+              /* onClick={() => onAddVehicle(client._id)} */
+            >
+              ➕ Añadir Vehículo
+            </button>
+          </div>
         </>
       )}
 
       {/* 2. MODO EDICIÓN DEL FORMULARIO */}
       {isEditing && (
         <div className="edit-form">
-
           <label>Nombre:</label>
-          <input
-            name="name"
-            value={form.name}
-            onChange={handleChange}
-          />
+          <input name="name" value={form.name} onChange={handleChange} />
 
           <label>Teléfono:</label>
           <input
@@ -57,11 +86,7 @@ export default function ClientCard({ client, onClose, onSave }) {
           />
 
           <label>Email:</label>
-          <input
-            name="email"
-            value={form.email}
-            onChange={handleChange}
-          />
+          <input name="email" value={form.email} onChange={handleChange} />
 
           <label>Dirección:</label>
           <input
@@ -116,18 +141,18 @@ export default function ClientCard({ client, onClose, onSave }) {
 
       {/* 3. BOTONES DE ACCIÓN (AHORA AL FINAL) */}
       <div className="client-buttons">
-        
         {/* BOTÓN CERRAR (Siempre visible) */}
-        <button className="close-btn" onClick={onClose}>X</button>
-        
+        <button className="close-btn" onClick={onClose}>
+          X
+        </button>
+
         {/* BOTONES EN MODO VISUALIZACIÓN */}
         {!isEditing && (
           <button className="edit-btn" onClick={() => setIsEditing(true)}>
             Editar cliente
           </button>
         )}
-        
-        {/* BOTONES EN MODO EDICIÓN */}
+
         {isEditing && (
           <>
             <button className="save-btn" onClick={handleSave}>
