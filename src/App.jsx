@@ -1,4 +1,3 @@
-// App.jsx (Código Modificado)
 import { useState } from "react";
 import Sidebar, { SECTIONS } from "./components/Sidebar/Sidebar";
 import ClientsPage from "./pages/ClientsPage/ClientsPage";
@@ -7,8 +6,8 @@ import WorkordersPage from "./pages/WorkordersPage/WorkordersPage";
 import MechanicsPage from "./pages/MechanicsPage/MechanicsPage";
 import CalendarPage from "./pages/CalendarPage/CalendarPage";
 import AuthPage from "./pages/AuthPage/AuthPage";
-
 import "./App.css";
+import { Toaster } from 'sonner';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(
@@ -50,6 +49,7 @@ function App() {
 
   return (
     <div className="app-layout">
+      <Toaster position="top-right" richColors />
       {isLoggedIn ? (
         <>
           {/* 3. PASAR LAS PROPS NECESARIAS AL SIDEBAR */}
