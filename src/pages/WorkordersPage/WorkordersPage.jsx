@@ -10,10 +10,10 @@ export default function WorkordersPage() {
     const load = async () => {
       try {
         const data = await getWorkorders();
-        setWorkorders(data);
+        setWorkorders(data?.workorders || []);//si data es undefined o null, usamos un array vacío
       } catch (err) {
         console.error(err);
-        setError("Error cargando órdenes de trabajo");
+        setError(err.message || "Error cargando partes de trabajo");
       } finally {
         setLoading(false);
       }

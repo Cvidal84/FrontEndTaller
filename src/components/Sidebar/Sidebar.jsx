@@ -1,4 +1,3 @@
-// src/components/Sidebar.jsx
 const SECTIONS = {
   CLIENTS: "clients",
   VEHICLES: "vehicles",
@@ -10,7 +9,7 @@ const SECTIONS = {
 
 export { SECTIONS };
 
-export default function Sidebar({ activeSection, onChangeSection }) {
+export default function Sidebar({ activeSection, onChangeSection, isAuthenticated, onLogout }) {
   return (
     <aside className="sidebar">
       <div className="sidebar-header">
@@ -73,16 +72,22 @@ export default function Sidebar({ activeSection, onChangeSection }) {
       </nav>
 
       <div className="sidebar-footer">
-        <button
-          className={
-            activeSection === SECTIONS.AUTH
-              ? "menu-btn auth-btn active"
-              : "menu-btn auth-btn"
-          }
-          onClick={() => onChangeSection(SECTIONS.AUTH)}
-        >
-          Iniciar sesión
-        </button>
+        {isAuthenticated ? (
+          <button className="menu-btn auth-btn" onClick={onLogout}>
+            Cerrar sesión
+          </button>
+        ) : (
+          <button
+            className={
+              activeSection === SECTIONS.AUTH
+                ? "menu-btn auth-btn active"
+                : "menu-btn auth-btn"
+            }
+            onClick={() => onChangeSection(SECTIONS.AUTH)}
+          >
+            Iniciar sesión
+          </button>
+        )}
       </div>
     </aside>
   );

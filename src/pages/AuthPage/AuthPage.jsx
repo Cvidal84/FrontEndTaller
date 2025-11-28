@@ -1,4 +1,5 @@
 // src/pages/AuthPage/AuthPage.jsx
+
 import { useState } from "react";
 import "./AuthPage.css";
 
@@ -7,7 +8,11 @@ export default function AuthPage({ onLoginSuccess }) {
   const [password, setPassword] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
 
-  const handleLogin = async () => {
+  // 💡 Modificamos handleLogin para aceptar el evento del formulario (e)
+  const handleLogin = async (e) => {
+    // 🛑 CLAVE: Evitar que la página se recargue (comportamiento por defecto del formulario)
+    e.preventDefault(); 
+    
     setErrorMsg("");
 
     if (!email || !password) {
@@ -25,7 +30,6 @@ export default function AuthPage({ onLoginSuccess }) {
       const data = await res.json();
 
       if (!res.ok) {
-        // Tu backend suele devolver un string de error
         setErrorMsg(data || "Credenciales incorrectas");
         return;
       }
@@ -50,13 +54,15 @@ export default function AuthPage({ onLoginSuccess }) {
     <div className="auth-container">
       <h2>Iniciar sesión</h2>
 
-      <div className="auth-form">
+      {/* 🔑 CLAVE: Usamos <form> y conectamos handleLogin al evento onSubmit */}
+      <form className="auth-form" onSubmit={handleLogin}>
         <label>Email</label>
         <input
           type="email"
           placeholder="usuario@email.com"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          required // Añadimos required para mejor UX
         />
 
         <label>Contraseña</label>
@@ -65,18 +71,20 @@ export default function AuthPage({ onLoginSuccess }) {
           placeholder="********"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          required // Añadimos required para mejor UX
         />
 
         {errorMsg && <p className="auth-error">{errorMsg}</p>}
 
+        {/* El botón debe ser de tipo submit para funcionar con Enter */}
         <button
-          type="button"
+          type="submit" // 💡 CLAVE: Cambiar a type="submit"
           className="login-btn"
-          onClick={handleLogin}
+          // Ya no necesitamos el onClick; onSubmit del formulario lo manejará
         >
           Iniciar sesión
         </button>
-      </div>
+      </form>
     </div>
   );
 }

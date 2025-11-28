@@ -1,4 +1,6 @@
 import { useState } from "react";
+import "./ClientCard.css";
+
 
 export default function ClientCard({ client, onClose, onSave }) {
   const [isEditing, setIsEditing] = useState(false);
@@ -7,23 +9,37 @@ export default function ClientCard({ client, onClose, onSave }) {
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
+  
+  const handleSave = () => {
+    onSave(form); // Llamar a ClientsPage para guardar
+    setIsEditing(false); // Salir del modo edición
+  };
 
   return (
     <div className="client-card">
-      <button className="close-btn" onClick={onClose}>X</button>
-
-      {/* TÍTULO */}
+      
+      {/* TÍTULO (Mantenemos el título arriba) */}
       <h2>{isEditing ? "Editar Cliente" : client.name}</h2>
 
-      {/* BOTÓN EDITAR */}
+      {/* 1. MODO VISUALIZACIÓN DE DATOS (NO BOTONES) */}
       {!isEditing && (
-        <button className="edit-btn" onClick={() => setIsEditing(true)}>
-          Editar cliente
-        </button>
+        <>
+          <p><strong>📞 Teléfono:</strong> {client.telephone}</p>
+          {client.email && <p><strong>📧 Email:</strong> {client.email}</p>}
+
+          {client.address && (
+            <>
+              <p><strong>📍 Dirección:</strong></p>
+              <p>{client.address.street}</p>
+              <p>{client.address.city} ({client.address.zip})</p>
+              <p>{client.address.country}</p>
+            </>
+          )}
+        </>
       )}
 
-      {/* MODO EDICIÓN */}
-      {isEditing ? (
+      {/* 2. MODO EDICIÓN DEL FORMULARIO */}
+      {isEditing && (
         <div className="edit-form">
 
           <label>Nombre:</label>
@@ -95,33 +111,34 @@ export default function ClientCard({ client, onClose, onSave }) {
               })
             }
           />
-
-          {/* BOTÓN GUARDAR */}
-          <button
-            className="save-btn"
-            onClick={() => {
-              onSave(form); // llamar a ClientsPage para guardar
-              setIsEditing(false);
-            }}
-          >
-            💾 Guardar cambios
-          </button>
         </div>
-      ) : (
-        <>
-          <p><strong>📞 Teléfono:</strong> {client.telephone}</p>
-          {client.email && <p><strong>📧 Email:</strong> {client.email}</p>}
-
-          {client.address && (
-            <>
-              <p><strong>📍 Dirección:</strong></p>
-              <p>{client.address.street}</p>
-              <p>{client.address.city} ({client.address.zip})</p>
-              <p>{client.address.country}</p>
-            </>
-          )}
-        </>
       )}
+
+      {/* 3. BOTONES DE ACCIÓN (AHORA AL FINAL) */}
+      <div className="client-buttons">
+        
+        {/* BOTÓN CERRAR (Siempre visible) */}
+        <button className="close-btn" onClick={onClose}>X</button>
+        
+        {/* BOTONES EN MODO VISUALIZACIÓN */}
+        {!isEditing && (
+          <button className="edit-btn" onClick={() => setIsEditing(true)}>
+            Editar cliente
+          </button>
+        )}
+        
+        {/* BOTONES EN MODO EDICIÓN */}
+        {isEditing && (
+          <>
+            <button className="save-btn" onClick={handleSave}>
+              💾 Guardar
+            </button>
+            <button className="cancel-btn" onClick={() => setIsEditing(false)}>
+              Cancelar
+            </button>
+          </>
+        )}
+      </div>
     </div>
   );
 }

@@ -1,5 +1,6 @@
+// App.jsx (Código Modificado)
 import { useState } from "react";
-import Sidebar, { SECTIONS } from "./components/Sidebar";
+import Sidebar, { SECTIONS } from "./components/Sidebar/Sidebar";
 import ClientsPage from "./pages/ClientsPage/ClientsPage";
 import VehiclesPage from "./pages/VehiclesPage/VehiclesPage";
 import WorkordersPage from "./pages/WorkordersPage/WorkordersPage";
@@ -10,12 +11,25 @@ import AuthPage from "./pages/AuthPage/AuthPage";
 import "./App.css";
 
 function App() {
-  const [activeSection, setActiveSection] = useState(SECTIONS.CLIENTS);
   const [isLoggedIn, setIsLoggedIn] = useState(
-    !!localStorage.getItem("token") // 👈 si hay token, arranca logeado
+    !!localStorage.getItem("token") 
+  );
+  
+  // 1. Inicializa la sección según el estado de login
+  const [activeSection, setActiveSection] = useState(
+    isLoggedIn ? SECTIONS.CLIENTS : SECTIONS.AUTH
   );
 
+  // 2. CREAR FUNCIÓN PARA CERRAR SESIÓN
+  const handleLogout = () => {
+    localStorage.removeItem("token"); // 🗑️ Borra el token
+    setIsLoggedIn(false); // 🔄 Actualiza el estado principal
+    setActiveSection(SECTIONS.AUTH); // Redirige al login
+  };
+
   const renderContent = () => {
+    // Si NO está logueado, esta función no se debería llamar (por el renderizado condicional), 
+    // pero si se llamara, simplemente devolvería el contenido normal.
     switch (activeSection) {
       case SECTIONS.CLIENTS:
         return <ClientsPage />;
@@ -27,6 +41,8 @@ function App() {
         return <MechanicsPage />;
       case SECTIONS.CALENDAR:
         return <CalendarPage />;
+      case SECTIONS.AUTH: // Si el usuario va a Auth mientras está logueado (solo ocurre si lo forzamos)
+        return <AuthPage onLoginSuccess={() => {}} />;
       default:
         return <p>Selecciona una sección.</p>;
     }
@@ -36,9 +52,12 @@ function App() {
     <div className="app-layout">
       {isLoggedIn ? (
         <>
+          {/* 3. PASAR LAS PROPS NECESARIAS AL SIDEBAR */}
           <Sidebar
             activeSection={activeSection}
             onChangeSection={setActiveSection}
+            isAuthenticated={isLoggedIn} // ✅ Le decimos al Sidebar si estamos logueados
+            onLogout={handleLogout} // ✅ Le pasamos la función para que la ejecute el botón
           />
           <main className="main-content">{renderContent()}</main>
         </>
@@ -46,7 +65,7 @@ function App() {
         <AuthPage
           onLoginSuccess={() => {
             setIsLoggedIn(true);
-            setActiveSection(SECTIONS.CLIENTS); // 👈 al logear, abre Clientes
+            setActiveSection(SECTIONS.CLIENTS);
           }}
         />
       )}

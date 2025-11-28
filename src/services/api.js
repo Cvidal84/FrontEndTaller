@@ -20,12 +20,6 @@ const getAuthHeaders = () => {
 };
 
 
-// 2. Funciones de Petición con Autenticación
-// --------------------------------------------------------------------
-
-/**
- * Obtiene la lista de clientes. Ahora enviará el token.
- */
 export const getClients = async () => {
     const res = await fetch(`${API_URL}/clients`, {
         method: "GET",
@@ -33,25 +27,20 @@ export const getClients = async () => {
     });
 
     if (!res.ok) {
-        // Si el estado es 401, sabemos que es un problema de autenticación/token
         if (res.status === 401) {
             throw new Error("Error 401: Sesión expirada o no autorizado.");
         }
         
-        // Intentamos obtener un mensaje de error del cuerpo de la respuesta del backend
         const errorBody = await res.json().catch(() => ({ error: `Error desconocido (Código ${res.status})` }));
         throw new Error(errorBody.error || `Error obteniendo clientes. Código: ${res.status}`);
     }
     
-    // Devolvemos la lista de clientes (asumiendo que viene en la propiedad 'clients')
     const data = await res.json();
     return data.clients; 
 };
 
 
-/**
- * Actualiza un cliente. Ahora enviará el token.
- */
+
 export const updateClient = async (client) => {
     const res = await fetch(`${API_URL}/clients/${client._id}`, {
         method: "PUT",
@@ -69,23 +58,81 @@ export const updateClient = async (client) => {
 };
 
 
-// 3. Resto de funciones (Aplicamos la misma corrección de headers)
-// --------------------------------------------------------------------
 
 export const getVehicles = async () => {
-    const res = await fetch(`${API_URL}/vehicles`, { headers: getAuthHeaders() });
-    if (!res.ok) throw new Error("Error obteniendo vehículos");
-    return res.json();
+    // 1. Obtener headers con autenticación (asumimos que getAuthHeaders() está definido arriba)
+    const headers = getAuthHeaders();
+    
+    // 2. Realizar la petición
+    const res = await fetch(`${API_URL}/vehicles`, {
+        method: "GET",
+        headers: headers, 
+    });
+
+    // 3. Manejo de errores
+    if (res.status === 401) {
+        throw new Error("Error 401: Sesión expirada o no autorizado.");
+    }
+    
+    if (!res.ok) {
+        // Manejo genérico para 403, 500, etc.
+        const errorBody = await res.json().catch(() => ({ error: `Error HTTP ${res.status}` }));
+        throw new Error(errorBody.error || `Error obteniendo vehículos. Código: ${res.status}`);
+    }
+    
+    // 4. Devolver datos
+    const data = await res.json();
+    return data.vehicles;
 };
+
+
 
 export const getMechanics = async () => {
-    const res = await fetch(`${API_URL}/mechanics`, { headers: getAuthHeaders() });
-    if (!res.ok) throw new Error("Error obteniendo mecánicos");
-    return res.json();
+    // 1. Obtener los headers con el token JWT
+    const res = await fetch(`${API_URL}/mechanics`, { 
+        method: "GET",
+        headers: getAuthHeaders(), // Asume que getAuthHeaders() está definida arriba
+    });
+
+    // 2. Manejo de errores
+    if (!res.ok) {
+        // Si el estado es 401, el token fue rechazado
+        if (res.status === 401) { 
+            throw new Error("Error 401: Sesión expirada o no autorizado.");
+        }
+        
+        // Manejo de otros errores
+        const errorBody = await res.json().catch(() => ({ error: `Error desconocido (Código ${res.status})` }));
+        throw new Error(errorBody.error || `Error obteniendo mecánicos. Código: ${res.status}`);
+    }
+    
+    // 3. Devolver solo el array
+    const data = await res.json();
+    return data.mechanics; 
 };
 
+
+
 export const getWorkorders = async () => {
-    const res = await fetch(`${API_URL}/workorders`, { headers: getAuthHeaders() });
-    if (!res.ok) throw new Error("Error obteniendo órdenes de trabajo");
-    return res.json();
+    // 1. Obtener los headers con el token JWT
+    const res = await fetch(`${API_URL}/workorders`, { 
+        method: "GET",
+        headers: getAuthHeaders(), // Asume que getAuthHeaders() está definida arriba
+    });
+
+    // 2. Manejo de errores
+    if (!res.ok) {
+        // Si el estado es 401, el token fue rechazado
+        if (res.status === 401) { 
+            throw new Error("Error 401: Sesión expirada o no autorizado.");
+        }
+        
+        // Manejo de otros errores
+        const errorBody = await res.json().catch(() => ({ error: `Error desconocido (Código ${res.status})` }));
+        throw new Error(errorBody.error || `Error obteniendo partes de trabajo. Código: ${res.status}`);
+    }
+    
+    // 3. Devolver solo el array
+    const data = await res.json();
+    return data.workorders; 
 };

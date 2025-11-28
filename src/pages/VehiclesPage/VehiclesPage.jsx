@@ -10,10 +10,10 @@ export default function VehiclesPage() {
     const load = async () => {
       try {
         const data = await getVehicles();
-        setVehicles(data);
+        setVehicles(data?.vehicles || []);//si data es undefined o null, usamos un array vacío
       } catch (err) {
         console.error(err);
-        setError("Error cargando vehículos");
+        setError(err.message || "Error cargando vehículos");
       } finally {
         setLoading(false);
       }
