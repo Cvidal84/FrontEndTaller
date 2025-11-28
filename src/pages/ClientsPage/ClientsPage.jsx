@@ -82,6 +82,7 @@ export default function ClientsPage() {
       <div className="client-details">
         {selectedClient ? (
           <ClientCard
+            key={selectedClient._id}
             client={selectedClient}
             onClose={() => setSelectedClient(null)}
             onSave={handleSaveClient}
