@@ -60,7 +60,6 @@ export const updateClient = async (client) => {
 
 
 export const getVehicles = async () => {
-    // 1. Obtener headers con autenticación (asumimos que getAuthHeaders() está definido arriba)
     
     // 2. Realizar la petición
     const res = await fetch(`${API_URL}/vehicles`, {
