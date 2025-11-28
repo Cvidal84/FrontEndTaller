@@ -9,8 +9,8 @@ export default function MechanicsPage() {
   useEffect(() => {
     const load = async () => {
       try {
-        const data = await getMechanics();
-        setMechanics(data);
+        const mechanics = await getMechanics();
+        setMechanics(mechanics);
       } catch (err) {
         console.error(err);
         setError("Error cargando mecánicos");

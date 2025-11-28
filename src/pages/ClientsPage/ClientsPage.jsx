@@ -13,8 +13,8 @@ export default function ClientsPage() {
   useEffect(() => {
     const load = async () => {
       try {
-        const data = await getClients();
-        setClients(data);
+        const clients = await getClients();
+        setClients(clients);
       } catch (err) {
         console.error(err);
         setError("Error cargando clientes");
