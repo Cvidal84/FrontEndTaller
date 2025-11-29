@@ -10,7 +10,7 @@ import {
   isToday
 } from 'date-fns';
 
-export default function CalendarGrid({ currentDate, appointments, onDateClick }) {
+export default function CalendarGrid({ currentDate, appointments, onDateClick, onAppointmentClick }) {
   const monthStart = startOfMonth(currentDate);
   const monthEnd = endOfMonth(monthStart);
   const startDate = startOfWeek(monthStart, { weekStartsOn: 1 });
@@ -52,7 +52,15 @@ export default function CalendarGrid({ currentDate, appointments, onDateClick })
             </div>
             
             {dayAppointments.map(apt => (
-              <div key={apt.id} className="appointment-chip" title={`${apt.time} - ${apt.clientName}`}>
+              <div 
+                key={apt.id} 
+                className="appointment-chip" 
+                title={`${apt.time} - ${apt.clientName}`}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onAppointmentClick(apt);
+                }}
+              >
                 {apt.time} {apt.clientName}
               </div>
             ))}

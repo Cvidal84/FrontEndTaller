@@ -1,24 +1,30 @@
 import { useState } from 'react';
-import { X } from 'lucide-react';
+import { X, Trash2 } from 'lucide-react';
+import { format } from 'date-fns';
 
-export default function AppointmentModal({ isOpen, onClose, onSave, initialDate }) {
-  const [formData, setFormData] = useState({
-    clientName: '',
-    vehicle: '',
-    date: initialDate ? new Date(initialDate).toISOString().split('T')[0] : '',
-    time: '09:00',
-    description: ''
+export default function AppointmentModal({ onClose, onSave, onDelete, initialDate, appointment }) {
+  const [formData, setFormData] = useState(() => {
+    if (appointment) {
+      return {
+        clientName: appointment.clientName,
+        vehicle: appointment.vehicle,
+        date: appointment.date,
+        time: appointment.time,
+        description: appointment.description || ''
+      };
+    }
+    return {
+      clientName: '',
+      vehicle: '',
+      date: initialDate ? format(initialDate, 'yyyy-MM-dd') : '',
+      time: '09:00',
+      description: ''
+    };
   });
-
-  if (!isOpen) return null;
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSave({
-      ...formData,
-      id: crypto.randomUUID(),
-      createdAt: new Date().toISOString()
-    });
+    onSave(formData);
     onClose();
   };
 
@@ -26,7 +32,7 @@ export default function AppointmentModal({ isOpen, onClose, onSave, initialDate 
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content" onClick={e => e.stopPropagation()}>
         <div className="modal-header">
-          <h3>Nueva Cita</h3>
+          <h3>{appointment ? 'Editar Cita' : 'Nueva Cita'}</h3>
           <button className="close-btn" onClick={onClose}>
             <X size={20} />
           </button>
@@ -89,13 +95,30 @@ export default function AppointmentModal({ isOpen, onClose, onSave, initialDate 
             />
           </div>
 
-          <div className="modal-footer">
-            <button type="button" className="cancel-btn" onClick={onClose}>
-              Cancelar
-            </button>
-            <button type="submit" className="save-btn">
-              Guardar Cita
-            </button>
+          <div className="modal-footer" style={{ justifyContent: 'space-between' }}>
+            {appointment && (
+              <button 
+                type="button" 
+                className="delete-btn" 
+                onClick={() => {
+                  if(window.confirm('¿Estás seguro de que quieres anular esta cita?')) {
+                    onDelete();
+                  }
+                }}
+                style={{ backgroundColor: '#ef4444', color: 'white', border: 'none', padding: '0.5rem 1rem', borderRadius: '0.375rem', display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }}
+              >
+                <Trash2 size={18} />
+                Anular Cita
+              </button>
+            )}
+            <div style={{ display: 'flex', gap: '0.5rem', marginLeft: 'auto' }}>
+              <button type="button" className="cancel-btn" onClick={onClose}>
+                Cancelar
+              </button>
+              <button type="submit" className="save-btn">
+                {appointment ? 'Guardar Cambios' : 'Guardar Cita'}
+              </button>
+            </div>
           </div>
         </form>
       </div>

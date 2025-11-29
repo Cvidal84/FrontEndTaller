@@ -12,6 +12,7 @@ export default function CalendarPage() {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
+  const [editingAppointment, setEditingAppointment] = useState(null);
   
   // En una app real, esto vendría de una API o base de datos
   const [appointments, setAppointments] = useState(() => {
@@ -35,6 +36,10 @@ export default function CalendarPage() {
         
         // Notificar si faltan 15 minutos o si es la hora exacta (con un margen de 1 min)
         if (diff === 15 || diff === 0) {
+          // Reproducir sonido
+          const audio = new Audio('https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3');
+          audio.play().catch(e => console.log('Audio play failed:', e));
+
           toast.info(`Cita con ${apt.clientName}`, {
             description: `${apt.vehicle} - ${apt.time}`,
             duration: 5000,
@@ -50,12 +55,36 @@ export default function CalendarPage() {
 
   const handleDateClick = (date) => {
     setSelectedDate(date);
+    setEditingAppointment(null);
     setIsModalOpen(true);
   };
 
-  const handleSaveAppointment = (newAppointment) => {
-    setAppointments([...appointments, newAppointment]);
-    toast.success('Cita agendada correctamente');
+  const handleAppointmentClick = (appointment) => {
+    setEditingAppointment(appointment);
+    setSelectedDate(new Date(appointment.date));
+    setIsModalOpen(true);
+  };
+
+  const handleSaveAppointment = (appointmentData) => {
+    if (editingAppointment) {
+      setAppointments(appointments.map(apt => 
+        apt.id === editingAppointment.id ? { ...appointmentData, id: apt.id, createdAt: apt.createdAt } : apt
+      ));
+      toast.success('Cita actualizada correctamente');
+    } else {
+      setAppointments([...appointments, { ...appointmentData, id: crypto.randomUUID(), createdAt: new Date().toISOString() }]);
+      toast.success('Cita agendada correctamente');
+    }
+    setEditingAppointment(null);
+  };
+
+  const handleDeleteAppointment = () => {
+    if (editingAppointment) {
+      setAppointments(appointments.filter(apt => apt.id !== editingAppointment.id));
+      toast.success('Cita eliminada correctamente');
+      setIsModalOpen(false);
+      setEditingAppointment(null);
+    }
   };
 
   const nextMonth = () => setCurrentDate(addMonths(currentDate, 1));
@@ -78,6 +107,7 @@ export default function CalendarPage() {
 
         <button className="add-btn" onClick={() => {
           setSelectedDate(new Date());
+          setEditingAppointment(null);
           setIsModalOpen(true);
         }}>
           <Plus size={18} />
@@ -89,14 +119,21 @@ export default function CalendarPage() {
         currentDate={currentDate}
         appointments={appointments}
         onDateClick={handleDateClick}
+        onAppointmentClick={handleAppointmentClick}
       />
 
-      <AppointmentModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onSave={handleSaveAppointment}
-        initialDate={selectedDate}
-      />
+      {isModalOpen && (
+        <AppointmentModal
+          onClose={() => {
+            setIsModalOpen(false);
+            setEditingAppointment(null);
+          }}
+          onSave={handleSaveAppointment}
+          onDelete={handleDeleteAppointment}
+          initialDate={selectedDate}
+          appointment={editingAppointment}
+        />
+      )}
     </div>
   );
 }
