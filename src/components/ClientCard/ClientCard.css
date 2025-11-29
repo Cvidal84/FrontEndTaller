@@ -19,3 +19,18 @@
     justify-content: center;
     gap: 20px;
 }
+.client-buttons .close-btn{
+    background-color: black;
+    padding: 10px;
+    color: white;
+    border-radius: 8px;
+}
+
+.client-buttons .edit-btn{
+    background-color: black;
+padding: 10px;
+color: white;
+border-radius: 8px;
+}
+
+
