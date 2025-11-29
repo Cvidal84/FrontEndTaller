@@ -1,5 +1,7 @@
 import { useState } from "react";
 import "./ClientCard.css";
+import Button from "../Button/Button";
+
 
 export default function ClientCard({ client, onClose, onSave }) {
   const [isEditing, setIsEditing] = useState(false);
@@ -8,18 +10,30 @@ export default function ClientCard({ client, onClose, onSave }) {
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
-
+  
+  const handleCancel = () => {
+    setIsEditing(false);
+  };
+  
   const handleSave = () => {
-    onSave(form); // Llamar a ClientsPage para guardar
-    setIsEditing(false); // Salir del modo edición
+    onSave(form);
+    setIsEditing(false);
+  };
+  
+
+  const handleAddressChange = (e) => {
+    setForm({
+      ...form,
+      address: { ...form.address, [e.target.name]: e.target.value },
+    });
   };
 
   return (
     <div className="client-card">
-      {/* TÍTULO (Mantenemos el título arriba) */}
+      
       <h2>{isEditing ? "Editar Cliente" : client.name}</h2>
 
-      {/* 1. MODO VISUALIZACIÓN DE DATOS (NO BOTONES) */}
+      
       {!isEditing && (
         <>
           <p>
@@ -44,11 +58,11 @@ export default function ClientCard({ client, onClose, onSave }) {
             </>
           )}
 
-          {/* 2. NUEVA SECCIÓN DE VEHÍCULOS */}
+          
           <div className="client-vehicles-section">
             <h3>Vehículos</h3>
 
-            {/* Si hay vehículos, los mostramos */}
+            
             {client.vehicles && client.vehicles.length > 0 ? (
               <ul className="vehicle-list">
                 {client.vehicles.map((v, index) => (
@@ -61,18 +75,19 @@ export default function ClientCard({ client, onClose, onSave }) {
               <p className="no-data">No hay vehículos registrados.</p>
             )}
 
-            {/* BOTÓN PARA AÑADIR VEHÍCULO A ESTE CLIENTE */}
-            <button
+            
+            <Button
+              variant="secondary"
               className="add-vehicle-btn"
-              /* onClick={() => onAddVehicle(client._id)} */
+              
             >
               ➕ Añadir Vehículo
-            </button>
+            </Button>
           </div>
         </>
       )}
 
-      {/* 2. MODO EDICIÓN DEL FORMULARIO */}
+      
       {isEditing && (
         <div className="edit-form">
           <label>Nombre:</label>
@@ -93,74 +108,55 @@ export default function ClientCard({ client, onClose, onSave }) {
             name="street"
             placeholder="Calle"
             value={form.address?.street || ""}
-            onChange={(e) =>
-              setForm({
-                ...form,
-                address: { ...form.address, street: e.target.value },
-              })
-            }
+            onChange={handleAddressChange}
           />
 
           <input
             name="city"
             placeholder="Ciudad"
             value={form.address?.city || ""}
-            onChange={(e) =>
-              setForm({
-                ...form,
-                address: { ...form.address, city: e.target.value },
-              })
-            }
+            onChange={handleAddressChange}
           />
 
           <input
             name="zip"
             placeholder="Código Postal"
             value={form.address?.zip || ""}
-            onChange={(e) =>
-              setForm({
-                ...form,
-                address: { ...form.address, zip: e.target.value },
-              })
-            }
+            onChange={handleAddressChange}
           />
 
           <input
             name="country"
             placeholder="País"
             value={form.address?.country || ""}
-            onChange={(e) =>
-              setForm({
-                ...form,
-                address: { ...form.address, country: e.target.value },
-              })
-            }
+            onChange={handleAddressChange}
           />
         </div>
       )}
 
-      {/* 3. BOTONES DE ACCIÓN (AHORA AL FINAL) */}
+      
       <div className="client-buttons">
-        {/* BOTÓN CERRAR (Siempre visible) */}
-        <button className="close-btn" onClick={onClose}>
+       
+        <Button variant="icon" onClick={onClose}>
           X
-        </button>
+        </Button>
 
-        {/* BOTONES EN MODO VISUALIZACIÓN */}
+        
         {!isEditing && (
-          <button className="edit-btn" onClick={() => setIsEditing(true)}>
+          <Button variant="secondary" onClick={() => setIsEditing(true)}>
             Editar cliente
-          </button>
+          </Button>
         )}
 
+       
         {isEditing && (
           <>
-            <button className="save-btn" onClick={handleSave}>
+            <Button variant="primary" onClick={handleSave}>
               💾 Guardar
-            </button>
-            <button className="cancel-btn" onClick={() => setIsEditing(false)}>
+            </Button>
+            <Button variant="secondary" onClick={handleCancel}>
               Cancelar
-            </button>
+            </Button>
           </>
         )}
       </div>
