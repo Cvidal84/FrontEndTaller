@@ -1,6 +1,6 @@
 .btn {
     padding: 8px 16px;
-    border: 1px solid transparent;
+    border: none;
     border-radius: 4px;
     cursor: pointer;
     font-size: 14px;
@@ -19,16 +19,17 @@
     color: white;
 }
 .btn-primary:hover:not(:disabled) {
-    background-color: #0056b3;
+    background-color: #567fab;
 }
 
 
 .btn-secondary {
-    background-color: #1d4ed8; 
-    color: white;
+    background-color: whitesmoke; 
+    color: black;
 }
 .btn-secondary:hover:not(:disabled) {
-    background-color: #5a6268;
+    background-color: #567fab;
+    color: white;
 }
 
 
@@ -44,7 +45,6 @@
 .btn-icon {
     background: none;
     color: #1d4ed8;
-    border: none;
     padding: 4px;
     font-size: 18px;
 }

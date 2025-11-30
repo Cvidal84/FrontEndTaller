@@ -136,29 +136,28 @@ export default function ClientCard({ client, onClose, onSave }) {
 
       
       <div className="client-buttons">
-       
-        <Button variant="icon" onClick={onClose}>
-          X
-        </Button>
 
-        
         {!isEditing && (
           <Button variant="secondary" onClick={() => setIsEditing(true)}>
             Editar cliente
           </Button>
         )}
-
        
+
         {isEditing && (
           <>
             <Button variant="primary" onClick={handleSave}>
-              💾 Guardar
+              Guardar
             </Button>
             <Button variant="secondary" onClick={handleCancel}>
               Cancelar
             </Button>
           </>
         )}
+        {/* intento poner el boton x al final siempre, simulando windows */}
+        <Button variant="danger" onClick={onClose}>
+          X
+        </Button>
       </div>
     </div>
   );
