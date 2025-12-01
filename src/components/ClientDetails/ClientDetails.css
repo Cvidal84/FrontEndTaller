@@ -1,36 +1,5 @@
-.client-card{
-    width: auto;
-    height: auto;
-    border: solid 3px rgba(15, 23, 42, 0.05);
-    border-radius: 8px;
-    padding: 20px;
-}
 
-.edit-form{
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    padding-bottom: 20px;
-    
-}
 
-.client-buttons{
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-}
-.client-buttons .close-btn{
-    background-color: black;
-    padding: 10px;
-    color: white;
-    border-radius: 8px;
-}
 
-.client-buttons .edit-btn{
-    background-color: black;
-    padding: 10px;
-color: white;
-border-radius: 8px;
-}
 
 

@@ -36,7 +36,7 @@ export default function BaseCard({
         <div className="base-card">
             
             {/* TÍTULO */}
-            <h2>{isEditing ? `Editar ${title}` : title}</h2>
+            <h2>{isEditing ? `Editar: ${title}` : title}</h2>
             
             {/* 1. CONTENIDO CENTRAL (CLIENTE, VEHÍCULO, ETC.) */}
             <div className="card-content-area">
