@@ -1,26 +1,31 @@
 const API_URL = "http://localhost:8080/api/v1";
 
-// 1. Función Auxiliar de Headers (Debe estar aquí para ser accesible)
-// --------------------------------------------------------------------
+// Función Auxiliar de Headers (Debe estar aquí para ser accesible)
 const getAuthHeaders = () => {
   const token = localStorage.getItem("token");
-
-  // Configuración base: JSON content
+  // Configuración base: JSON content:
   const headers = {
     "Content-Type": "application/json",
   };
-
-  // Si hay token, añadimos el header de autorización
+  // Si hay token, añadimos el header de autorización:
   if (token) {
     // Formato Bearer: ¡Importante el espacio después de Bearer!
     headers["Authorization"] = `Bearer ${token}`;
   }
-
   return headers;
 };
 
-export const getClients = async () => {
-  const res = await fetch(`${API_URL}/clients`, {
+// traer y buscar clientes:
+export const getClients = async (page = 1, search = "") => {
+  // preparamos los parámetros de la URL:
+  const params = new URLSearchParams({
+    page: page,
+    limit: 10, // aseguramos que coincida con el default del backend
+    search: search,
+  });
+
+  // añadimos los params a la URL: /clients?page=1&search=...
+  const res = await fetch(`${API_URL}/clients?${params.toString()}`, {
     method: "GET",
     headers: getAuthHeaders(),
   });
@@ -29,7 +34,6 @@ export const getClients = async () => {
     if (res.status === 401) {
       throw new Error("Error 401: Sesión expirada o no autorizado.");
     }
-
     const errorBody = await res
       .json()
       .catch(() => ({ error: `Error desconocido (Código ${res.status})` }));
@@ -39,10 +43,11 @@ export const getClients = async () => {
   }
 
   const data = await res.json();
-  return data.clients;
-};
 
-// Añadir esta función en services/api.js
+  // 4. IMPORTANTE: Devolvemos 'data' completo.
+  // con { clients: [...] y pagination: {...} }
+  return data;
+};
 
 export const getClientById = async (id) => {
   // Validación simple por seguridad

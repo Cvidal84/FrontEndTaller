@@ -3,6 +3,7 @@
   grid-template-columns: minmax(260px, 320px) 1fr;
   gap: 1.5rem;
   height: 100%;
+  overflow: hidden;
 }
 
 /* Panel de la lista */
@@ -12,11 +13,38 @@
   border-radius: 10px;
   border: 1px solid #e5e7eb;
   box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05);
+
+  display: flex;
+  flex-direction: column;
+  height: 100%; /* Ocupa toda la altura de la celda del grid */
+  box-sizing: border-box; /* Asegura que el padding no rompa la altura */
+  overflow: hidden;
 }
 
 .clients-list h2 {
   margin-top: 0;
   margin-bottom: 0.75rem;
+  flex-shrink: 0;
+}
+
+/* Input de búsqueda */
+.search-input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+  box-sizing: border-box; /* Para que el padding no rompa el ancho */
+  background-color: #dbeafe;
+  color: #213547;
+  flex-shrink: 0;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #1d4ed8;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
 }
 
 /* Lista limpia sin bullets */
@@ -24,6 +52,10 @@
   list-style: none;
   margin: 0;
   padding: 0;
+
+  flex: 1; /* Crece para llenar el hueco entre el buscador y la paginación */
+  overflow-y: auto; /* Si hay muchos items, haz scroll AQUÍ dentro */
+  min-height: 0;
 }
 
 /* Cada cliente como “tarjeta” */
@@ -78,6 +110,17 @@
 .client-email {
   font-size: 0.8rem;
   color: #6b7280;
+}
+/* Paginación */
+.pagination-controls {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid #e5e7eb;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0; /* Evita que se aplaste */
 }
 
 /* Panel de detalles a la derecha */
