@@ -84,8 +84,9 @@ export default function ClientsPage() {
           {clients.map((c) => (
             <li
               key={c._id}
-              className="client-item"
-              // 3. CAMBIO AQUÍ: Usamos la nueva función en vez del setter directo
+              className={`client-item ${
+                selectedClient?._id === c._id ? "active" : ""
+              }`}
               onClick={() => handleSelectClient(c)}
             >
               <div className="client-avatar">
