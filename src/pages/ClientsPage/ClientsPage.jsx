@@ -1,6 +1,4 @@
-
 import { useEffect, useState } from "react";
-// 1. IMPORTANTE: Importamos getClientById
 import { getClients, updateClient, getClientById } from "../../services/api";
 import ClientDetails from "../../components/ClientDetails/ClientDetails";
 import "./ClientsPage.css";
@@ -30,22 +28,24 @@ export default function ClientsPage() {
 
   // 2. NUEVA FUNCIÓN: Manejar la selección del cliente
   const handleSelectClient = async (basicClient) => {
-    // PASO A: UI Optimista.
     // Mostramos inmediatamente los datos básicos que ya tenemos en la lista (Nombre, Tlf...)
-    // Así el usuario siente que la app es instantánea.
     setSelectedClient(basicClient);
 
     try {
-      // PASO B: Pedimos los detalles COMPLETOS al servidor (Aquí vienen los vehículos)
-      // Asegúrate de que tu backend getClientById tenga el .populate('vehicles')
+      // Pedimos los detalles COMPLETOS al servidor (Aquí vienen los vehículos)
       const fullClientData = await getClientById(basicClient._id);
 
-      // PASO C: Actualizamos el estado con los datos completos
+      // Actualizamos el estado con los datos completos
       // React volverá a renderizar ClientCard, ahora con la lista de coches
-      setSelectedClient(fullClientData);
+      // Comprobamos si el usuario NO ha cambiado de selección mientras cargaba
+      setSelectedClient((currentSelection) => {
+        if (currentSelection?._id === basicClient._id) {
+          return fullClientData;
+        }
+        return currentSelection; // Si ya cambió a otro, no sobrescribimos
+      });
     } catch (err) {
       console.error("Error cargando detalles profundos del cliente", err);
-      // Opcional: Podrías mostrar una alerta si falla la carga de detalles
     }
   };
 
@@ -103,36 +103,21 @@ export default function ClientsPage() {
       </div>
 
       {/* PANEL DERECHO */}
-
       <div className="client-details">
-
         {selectedClient ? (
-
-          <ClientDetails // ✅ CORREGIDO: Usar el nombre ClientDetails
-
+          <ClientDetails
             // La key fuerza a que se reinicie el componente si cambiamos de ID
-
             key={selectedClient._id}
-
             client={selectedClient}
-
             onClose={() => setSelectedClient(null)}
-
             onSave={handleSaveClient}
 
-            // Aquí iría tu onAddVehicle cuando lo implementes
-
+            // Aquí iría onAddVehicle cuando se implementes
           />
-
         ) : (
-
           <p>Selecciona un cliente de la lista</p>
-
         )}
-
       </div>
-
     </div>
-
   );
 }
