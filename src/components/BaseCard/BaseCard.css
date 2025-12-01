@@ -1,0 +1,19 @@
+.base-card{
+    border: solid 3px black;
+    border-radius: 8px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.card-content-area{
+    display: flex;
+    flex-direction: column;
+}
+
+.edit-form{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;  
+}
+

@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 // 1. IMPORTANTE: Importamos getClientById
 import { getClients, updateClient, getClientById } from "../../services/api";
-import ClientDetails from "../../components/ClientCard/ClientDetails";
+import ClientDetails from "../../components/ClientDetails/ClientDetails";
 import "./ClientsPage.css";
 
 export default function ClientsPage() {
