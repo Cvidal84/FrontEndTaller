@@ -1,9 +1,58 @@
-import React from "react";
+import React, { useState } from "react";
+import { createVehicle } from "../../services/api";
 import BaseCard from "../BaseCard/BaseCard"; 
 
 // 1. Componente que define los campos de Cliente
 // (Recibe props internas de BaseCard, como form, isEditing y updateForm)
 function ClientFields({ form, isEditing, updateForm }) {
+    // Estado para controlar si estamos añadiendo un vehículo
+    const [isAddingVehicle, setIsAddingVehicle] = useState(false);
+    const [newVehicle, setNewVehicle] = useState({ plate: "", brand: "", model: "", kms: "" });
+
+    // Función para manejar cambios en el formulario de nuevo vehículo
+    const handleNewVehicleChange = (e) => {
+        setNewVehicle({ ...newVehicle, [e.target.name]: e.target.value });
+    };
+
+    // Función para guardar el nuevo vehículo
+    const handleAddVehicle = async () => {
+        if (!newVehicle.plate || !newVehicle.brand || !newVehicle.model) {
+            alert("Por favor, rellena todos los campos del vehículo.");
+            return;
+        }
+
+        // Validación de matrícula española
+        const plateRegex = /^(\d{4}[B-DF-HJ-NP-TV-Z]{3}|[A-Z]{1,2}\d{4}[A-Z]{0,2})$/i;
+        if (!plateRegex.test(newVehicle.plate)) {
+            alert("La matrícula no tiene un formato válido (Ej: 1234BCD o M1234AB)");
+            return;
+        }
+
+        try {
+            // Llamamos a la API para crear el vehículo
+            // IMPORTANTE: Asignamos el vehículo al cliente actual (form._id)
+            // Aseguramos que la matrícula vaya en mayúsculas
+            const vehicleToCreate = { 
+                ...newVehicle, 
+                plate: newVehicle.plate.toUpperCase(),
+                client: form._id 
+            };
+            const createdVehicle = await createVehicle(vehicleToCreate);
+
+            // Actualizamos la lista de vehículos en el estado local
+            // Si form.vehicles no existe, lo inicializamos
+            const currentVehicles = form.vehicles || [];
+            updateForm({ ...form, vehicles: [...currentVehicles, createdVehicle] });
+
+            // Limpiamos y cerramos el formulario
+            setNewVehicle({ plate: "", brand: "", model: "", kms: "" });
+            setIsAddingVehicle(false);
+            alert("Vehículo añadido correctamente ✅");
+        } catch (error) {
+            console.error("Error añadiendo vehículo:", error);
+            alert("Error al añadir el vehículo ❌");
+        }
+    };
     
     // Función para manejar campos simples (nombre, teléfono, email)
     const handleChange = (e) => {
@@ -53,7 +102,48 @@ function ClientFields({ form, isEditing, updateForm }) {
                     ) : (
                         <p className="no-data">No hay vehículos registrados.</p>
                     )}
-                    <button className="add-vehicle-btn">➕ Añadir Vehículo</button>
+                    <button className="add-vehicle-btn" onClick={() => setIsAddingVehicle(!isAddingVehicle)}>
+                        {isAddingVehicle ? "Cancelar" : "➕ Añadir Vehículo"}
+                    </button>
+                    
+                    {/* Formulario para añadir vehículo */}
+                    {isAddingVehicle && (
+                        <div className="add-vehicle-form" style={{ marginTop: '10px', padding: '10px', border: '1px solid #ddd', borderRadius: '5px' }}>
+                            <h4>Nuevo Vehículo</h4>
+                            <div style={{ display: 'flex', gap: '5px', marginBottom: '5px' }}>
+                                <input 
+                                    name="plate" 
+                                    placeholder="Matrícula" 
+                                    value={newVehicle.plate} 
+                                    onChange={handleNewVehicleChange}
+                                    style={{ flex: 1 }}
+                                />
+                                <input 
+                                    name="brand" 
+                                    placeholder="Marca" 
+                                    value={newVehicle.brand} 
+                                    onChange={handleNewVehicleChange} 
+                                    style={{ flex: 1 }}
+                                />
+                                <input 
+                                    name="model" 
+                                    placeholder="Modelo" 
+                                    value={newVehicle.model} 
+                                    onChange={handleNewVehicleChange} 
+                                    style={{ flex: 1 }}
+                                />
+                                <input 
+                                    name="kms" 
+                                    type="number"
+                                    placeholder="Kms" 
+                                    value={newVehicle.kms || ""} 
+                                    onChange={handleNewVehicleChange} 
+                                    style={{ flex: 0.5 }}
+                                />
+                            </div>
+                            <button onClick={handleAddVehicle} style={{ marginTop: '5px' }}>Guardar Vehículo</button>
+                        </div>
+                    )}
                 </div>
             </>
         );

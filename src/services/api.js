@@ -255,5 +255,23 @@ export const createWorkorder = async (workorder) => {
   }
 
   const data = await res.json();
-  return data.workorder; // Asumimos que devuelve la nueva orden
+  return data.workorder;
+};
+
+export const createVehicle = async (vehicle) => {
+  const res = await fetch(`${API_URL}/vehicles`, {
+    method: "POST",
+    headers: getAuthHeaders(),
+    body: JSON.stringify(vehicle),
+  });
+
+  if (!res.ok) {
+    const errorBody = await res
+      .json()
+      .catch(() => ({ error: "Error desconocido al crear vehículo" }));
+    throw new Error(errorBody.error || "Error creando vehículo");
+  }
+
+  const data = await res.json();
+  return data.vehicle;
 };

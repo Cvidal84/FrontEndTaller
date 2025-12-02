@@ -154,7 +154,7 @@ export default function WorkordersPage() {
                                     </div>
                                     <div className="workorder-main">
                                         <span className="workorder-title">
-                                            {wo.vehiclePlate} - {wo.clientId?.name || "Sin Cliente"}
+                                            {wo.vehicleId?.plate || "Sin Vehículo"} - {wo.clientId?.name || "Sin Cliente"}
                                         </span>
                                         <span className="workorder-status">{wo.status}</span>
                                         {wo.description && (
