@@ -182,3 +182,31 @@ export const getWorkorders = async () => {
   const data = await res.json();
   return data.workorders;
 };
+
+export const updateWorkorder = async (workorder) => {
+  // 1. Usamos el ID de la workorder para la ruta PUT
+  const res = await fetch(`${API_URL}/workorders/${workorder._id}`, {
+    method: "PUT",
+    headers: getAuthHeaders(),
+    // Enviamos el objeto completo de la orden de trabajo en el cuerpo
+    body: JSON.stringify(workorder),
+  });
+
+  // 2. Manejo de errores HTTP
+  if (!res.ok) {
+    // Intentamos leer el cuerpo del error si está disponible (ej. 400, 409, 500)
+    const errorBody = await res
+      .json()
+      .catch(() => ({ error: "Error desconocido al actualizar" }));
+
+    throw new Error(
+      errorBody.error || "Error actualizando la orden de trabajo"
+    );
+  }
+
+  // 3. Devolver los datos actualizados
+  const data = await res.json();
+
+  // Asumimos que tu backend devuelve la orden actualizada en la propiedad 'workorder'
+  return data.workorder;
+};
