@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 // Importamos la función de API que ya tienes
 import { getWorkorders, updateWorkorder } from "../../services/api"; 
-// 💡 Importamos el componente de detalle y el BaseCard (si lo has creado como wrapper)
-import WorkorderDetails from "../../components/WorkorderDetails/WorkorderDetails";
+// 💡 Importamos el componente de detalle
+import WorkorderDetails from "../../components/WorkorderDetails/WorkorderDetails"; 
 import './WorkordersPage.css';
 
 export default function WorkordersPage() {
@@ -31,7 +31,6 @@ export default function WorkordersPage() {
     // Función para guardar cambios (llama a la API)
     const handleSaveWorkorder = async (updatedWorkorder) => {
         try {
-            // Asume que tienes una función updateWorkorder en tu api.js
             const workorderFromApi = await updateWorkorder(updatedWorkorder); 
 
             // Actualizar la lista izquierda
@@ -51,8 +50,6 @@ export default function WorkordersPage() {
     
     // Función para manejar la selección de una orden en la lista
     const handleSelectWorkorder = (workorder) => {
-        // En este caso, asumimos que getWorkorders trae los datos completos, 
-        // a diferencia de ClientsPage.
         setSelectedWorkorder(workorder); 
     };
 
@@ -75,9 +72,22 @@ export default function WorkordersPage() {
                             onClick={() => handleSelectWorkorder(wo)}
                             className="workorder-item"
                         >
-                            {/* Tu numeración y resumen */}
                             <h3>Orden de Trabajo #{index + 1}</h3> 
-                            <strong>Matrícula:</strong> {wo.vehiclePlate} <br />
+                            
+                            {wo.clientId && (
+                                <p>
+                                    <strong>Cliente:</strong> {wo.clientId.name}
+                                </p>
+                            )}
+                            
+                            {/* 🔑 AÑADIDO: Muestra la descripción de la reparación */}
+                            {wo.description && (
+                                <p>
+                                    <strong>Reparación:</strong> {wo.description}
+                                </p>
+                            )}
+                            
+                            <strong>Matrícula:</strong> {wo.vehiclePlate}
                             <strong>Estado:</strong> {wo.status}
                         </li>
                     ))}
@@ -87,8 +97,7 @@ export default function WorkordersPage() {
             {/* PANEL DERECHO (DETALLES) */}
             <div className="workorder-details-panel">
                 {selectedWorkorder ? (
-                    // 💡 Usamos el componente WorkorderDetails para mostrar los detalles
-                    <WorkorderDetailsWrapper 
+                    <WorkorderDetails
                         workorder={selectedWorkorder}
                         onClose={() => setSelectedWorkorder(null)}
                         onSave={handleSaveWorkorder} 
