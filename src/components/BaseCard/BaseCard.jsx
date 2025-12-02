@@ -11,9 +11,10 @@ export default function BaseCard({
     onSave,         // Función que llama a la API para guardar
     children,       // El contenido específico que debe mostrarse DENTRO del marco
     footerContent,  // Contenido opcional bajo los botones
+    initialIsEditing = false, // Nuevo prop para iniciar en modo edición
 }) {
     // 💡 El estado y el modo de edición se gestionan aquí
-    const [isEditing, setIsEditing] = useState(false);
+    const [isEditing, setIsEditing] = useState(initialIsEditing);
     // Usamos un estado interno para el formulario, basado en la data inicial
     const [form, setForm] = useState(initialData); 
 

@@ -1,5 +1,4 @@
 import React from "react";
-// 💡 Importamos el componente genérico para el marco y la lógica de botones
 import BaseCard from "../BaseCard/BaseCard"; 
 
 // 1. Componente que define los campos de Cliente

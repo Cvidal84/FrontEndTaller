@@ -1,0 +1,168 @@
+.workorders-layout {
+  display: grid;
+  grid-template-columns: minmax(260px, 320px) 1fr;
+  gap: 1.5rem;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* Panel de la lista */
+.workorders-list {
+  background: #ffffff;
+  padding: 1rem;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05);
+
+  display: flex;
+  flex-direction: column;
+  height: 100%; /* Ocupa toda la altura de la celda del grid */
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.workorders-list h2 {
+  margin-top: 0;
+  margin-bottom: 0.75rem;
+  flex-shrink: 0;
+}
+
+
+
+/* Input de búsqueda */
+.search-input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+  box-sizing: border-box;
+  background-color: #dbeafe;
+  color: #213547;
+  flex-shrink: 0;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #1d4ed8;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+}
+
+/* Lista limpia sin bullets */
+.workorder-list-items {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  flex: 1; /* Crece para llenar el hueco */
+  overflow-y: auto; /* Scroll interno */
+  min-height: 0;
+}
+
+/* Cada orden como “tarjeta” */
+.workorder-item {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.6rem 0.7rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.15s ease, box-shadow 0.15s ease,
+    transform 0.05s ease;
+  margin-bottom: 0.35rem;
+}
+
+.workorder-item.active,
+.workorder-item:hover {
+  background-color: #eff6ff;
+  box-shadow: 0 1px 3px rgba(37, 99, 235, 0.2);
+  transform: translateY(-1px);
+}
+
+/* Circulito con número de orden */
+.workorder-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  background-color: #dbeafe;
+  color: #1d4ed8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.8rem;
+  flex-shrink: 0;
+}
+
+/* Texto orden */
+.workorder-main {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; /* Para que el texto largo no rompa el layout */
+}
+
+.workorder-title {
+  font-weight: 600;
+  color: #111827;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.workorder-status {
+  font-size: 0.85rem;
+  color: #4b5563;
+}
+
+.workorder-desc {
+  font-size: 0.75rem;
+  color: #6b7280;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Paginación */
+.pagination-controls {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid #e5e7eb;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+/* Panel de detalles a la derecha */
+.workorder-details-panel {
+  background: #ffffff;
+  padding: 1rem;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05);
+  overflow-y: auto; /* Scroll si el detalle es muy largo */
+}
+
+/* Botón de crear orden */
+.create-workorder-btn {
+  background-color: #3b82f6; /* Azul consistente con el tema */
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 0.65rem;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.create-workorder-btn:hover {
+  background-color: #2563eb; /* Azul más oscuro al pasar el ratón */
+  transform: scale(1.05);
+}
+
+.create-workorder-btn:active {
+  transform: scale(0.95);
+}

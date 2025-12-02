@@ -154,9 +154,15 @@ export const getMechanics = async () => {
   return data.mechanics;
 };
 
-export const getWorkorders = async () => {
+export const getWorkorders = async (page = 1, search = "") => {
   // 1. Obtener los headers con el token JWT
-  const res = await fetch(`${API_URL}/workorders`, {
+  const params = new URLSearchParams({
+    page: page,
+    limit: 10,
+    search: search,
+  });
+
+  const res = await fetch(`${API_URL}/workorders?${params.toString()}`, {
     method: "GET",
     headers: getAuthHeaders(), // Asume que getAuthHeaders() está definida arriba
   });
@@ -180,7 +186,30 @@ export const getWorkorders = async () => {
 
   // 3. Devolver solo el array
   const data = await res.json();
-  return data.workorders;
+  return data; // Devolvemos todo el objeto (workorders + pagination)
+};
+
+export const getWorkorderById = async (id) => {
+  if (!id) throw new Error("Se necesita un ID para buscar la orden.");
+
+  const res = await fetch(`${API_URL}/workorders/${id}`, {
+    method: "GET",
+    headers: getAuthHeaders(),
+  });
+
+  if (!res.ok) {
+    if (res.status === 401) throw new Error("Error 401: Sesión expirada.");
+    if (res.status === 404) throw new Error("Orden no encontrada (404).");
+    const errorBody = await res
+      .json()
+      .catch(() => ({ error: "Error desconocido" }));
+    throw new Error(
+      errorBody.error || `Error obteniendo orden. Código: ${res.status}`
+    );
+  }
+
+  const data = await res.json();
+  return data; // Asumimos que devuelve el objeto directo o { workorder: ... }
 };
 
 export const updateWorkorder = async (workorder) => {
@@ -209,4 +238,22 @@ export const updateWorkorder = async (workorder) => {
 
   // Asumimos que tu backend devuelve la orden actualizada en la propiedad 'workorder'
   return data.workorder;
+};
+
+export const createWorkorder = async (workorder) => {
+  const res = await fetch(`${API_URL}/workorders`, {
+    method: "POST",
+    headers: getAuthHeaders(),
+    body: JSON.stringify(workorder),
+  });
+
+  if (!res.ok) {
+    const errorBody = await res
+      .json()
+      .catch(() => ({ error: "Error desconocido al crear" }));
+    throw new Error(errorBody.error || "Error creando la orden de trabajo");
+  }
+
+  const data = await res.json();
+  return data.workorder; // Asumimos que devuelve la nueva orden
 };

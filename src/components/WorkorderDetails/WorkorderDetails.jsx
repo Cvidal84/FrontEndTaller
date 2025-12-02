@@ -1,7 +1,5 @@
 import React from 'react';
-import BaseCard from '../BaseCard/BaseCard'; // Asegúrate de que esta ruta sea correcta
-// Asegúrate de que Button exista y sea accesible
-import Button from "../Button/Button"; 
+import BaseCard from '../BaseCard/BaseCard'; 
 
 // --- 1. COMPONENTE INTERNO: CAMPOS DE LA ORDEN DE TRABAJO ---
 function WorkorderFields({ form, isEditing, updateForm }) {
@@ -59,11 +57,11 @@ function WorkorderFields({ form, isEditing, updateForm }) {
 }
 
 // --- 2. COMPONENTE ENVOLTORIO PRINCIPAL (WRAPPER) ---
-export default function WorkorderDetails({ workorder, onClose, onSave }) {
+export default function WorkorderDetails({ workorder, onClose, onSave, customOrderNumber, initialIsEditing = false }) {
     
     // El título de la tarjeta
-    // Usamos el snapshot para el número de orden si no está en la raíz del objeto
-    const title = `Orden #${workorder.snapshot?.orderNumber || 'Nueva'}`; 
+    // Si viene customOrderNumber (calculado en la lista), lo usamos. Si no, fallback al snapshot.
+    const title = `Orden #${customOrderNumber || workorder.snapshot?.orderNumber || 'Nueva'}`; 
     
     return (
         <BaseCard
@@ -72,6 +70,7 @@ export default function WorkorderDetails({ workorder, onClose, onSave }) {
             onClose={onClose}
             onSave={onSave}
             footerContent={<p>Creada: {new Date(workorder.createdAt).toLocaleDateString()}</p>}
+            initialIsEditing={initialIsEditing}
         >
             {/* Pasamos el componente de campos como hijo del BaseCard */}
             <WorkorderFields /> 
