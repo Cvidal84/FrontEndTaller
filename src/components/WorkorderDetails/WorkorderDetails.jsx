@@ -43,7 +43,11 @@ function WorkorderFields({ form, isEditing, updateForm }) {
             {form.clientId && <p>Cliente: {form.clientId.name}</p>} 
             
             <label>Estado:</label>
-            <input name="status" value={form.status} onChange={handleChange} />
+            <select name="status" value={form.status} onChange={handleChange}>
+                {["Pendiente", "En proceso", "Completada", "Cancelada"].map(status => (
+                    <option key={status} value={status}>{status}</option>
+                ))}
+            </select>
             
             <label>Coste Estimado (€):</label>
             <input name="estimatedCost" type="number" value={form.estimatedCost || 0} onChange={handleChange} />

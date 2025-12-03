@@ -1,0 +1,115 @@
+/* Layout principal: Lista izquierda + Panel derecho */
+.vehicles-layout {
+    display: flex;
+    height: calc(100vh - 60px); /* Ajusta según tu header */
+    overflow: hidden;
+    background-color: #f4f4f9;
+  }
+  
+  /* --- LISTA IZQUIERDA --- */
+  .vehicles-list {
+    width: 350px; /* Ancho fijo para la lista */
+    background-color: white;
+    border-right: 1px solid #ddd;
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    overflow-y: auto;
+  }
+  
+  .vehicles-list h2 {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    color: #333;
+  }
+  
+  /* Input de búsqueda */
+  .search-input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 1rem;
+    font-size: 1rem;
+  }
+  
+  /* Lista de items */
+  .vehicles-list-items {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    flex-grow: 1; /* Ocupa el espacio restante */
+  }
+  
+  /* Item individual de vehículo */
+  .vehicle-item {
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .vehicle-item:hover {
+    background-color: #f9f9f9;
+  }
+  
+  .vehicle-item.active {
+    background-color: #e6f7ff; /* Color de selección (azul claro) */
+    border-left: 4px solid #007bff;
+  }
+  
+  /* Avatar / Icono del vehículo */
+  .vehicle-avatar {
+    width: 40px;
+    height: 40px;
+    background-color: #007bff;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    margin-right: 12px;
+    flex-shrink: 0;
+  }
+  
+  /* Información principal del item */
+  .vehicle-main {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  
+  .vehicle-plate {
+    font-weight: bold;
+    color: #333;
+  }
+  
+  .vehicle-model {
+    font-size: 0.9rem;
+    color: #666;
+  }
+
+  .vehicle-client {
+    font-size: 0.85rem;
+    color: #007bff;
+    margin-top: 2px;
+  }
+  
+  /* --- PANEL DERECHO (DETALLES) --- */
+  .vehicle-details-panel {
+    flex-grow: 1; /* Ocupa el resto del ancho */
+    padding: 2rem;
+    overflow-y: auto;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* Alinea la tarjeta arriba */
+  }
+  
+  /* Mensaje cuando no hay selección */
+  .vehicle-details-panel > p {
+    color: #888;
+    font-size: 1.2rem;
+    margin-top: 3rem;
+  }

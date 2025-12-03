@@ -275,3 +275,44 @@ export const createVehicle = async (vehicle) => {
   const data = await res.json();
   return data.vehicle;
 };
+
+export const getVehicleById = async (id) => {
+  if (!id) throw new Error("Se necesita un ID para buscar el vehículo.");
+
+  const res = await fetch(`${API_URL}/vehicles/${id}`, {
+    method: "GET",
+    headers: getAuthHeaders(),
+  });
+
+  if (!res.ok) {
+    if (res.status === 401) throw new Error("Error 401: Sesión expirada.");
+    if (res.status === 404) throw new Error("Vehículo no encontrado (404).");
+    const errorBody = await res
+      .json()
+      .catch(() => ({ error: "Error desconocido" }));
+    throw new Error(
+      errorBody.error || `Error obteniendo vehículo. Código: ${res.status}`
+    );
+  }
+
+  const data = await res.json();
+  return data; // Asumimos que devuelve el objeto directo o { vehicle: ... }
+};
+
+export const updateVehicle = async (vehicle) => {
+  const res = await fetch(`${API_URL}/vehicles/${vehicle._id}`, {
+    method: "PUT",
+    headers: getAuthHeaders(),
+    body: JSON.stringify(vehicle),
+  });
+
+  if (!res.ok) {
+    const errorBody = await res
+      .json()
+      .catch(() => ({ error: "Error desconocido al actualizar vehículo" }));
+    throw new Error(errorBody.error || "Error actualizando vehículo");
+  }
+
+  const data = await res.json();
+  return data.vehicle;
+};
