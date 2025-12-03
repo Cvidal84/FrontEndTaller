@@ -119,7 +119,7 @@ export default function WorkordersPage() {
                         className="create-workorder-btn"
                         title="Crear nueva orden"
                     >
-                        + Nueva
+                        +
                     </button>
                 </div>
                 

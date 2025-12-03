@@ -99,20 +99,25 @@ export const updateClient = async (client) => {
   return data.client;
 };
 
-export const getVehicles = async () => {
-  // 2. Realizar la petición
-  const res = await fetch(`${API_URL}/vehicles`, {
+export const getVehicles = async (page = 1, search = "") => {
+  // 1. Preparamos los parámetros de la URL
+  const params = new URLSearchParams({
+    page: page,
+    limit: 10, // Debe coincidir con el backend
+    search: search,
+  });
+
+  // 2. Realizar la petición con la query string
+  const res = await fetch(`${API_URL}/vehicles?${params.toString()}`, {
     method: "GET",
     headers: getAuthHeaders(),
   });
 
   // 3. Manejo de errores
-  if (res.status === 401) {
-    throw new Error("Error 401: Sesión expirada o no autorizado.");
-  }
-
   if (!res.ok) {
-    // Manejo genérico para 403, 500, etc.
+    if (res.status === 401) {
+      throw new Error("Error 401: Sesión expirada o no autorizado.");
+    }
     const errorBody = await res
       .json()
       .catch(() => ({ error: `Error HTTP ${res.status}` }));
@@ -121,9 +126,9 @@ export const getVehicles = async () => {
     );
   }
 
-  // 4. Devolver datos
+  // 4. Devolver datos (se espera { vehicles: [], pagination: {} })
   const data = await res.json();
-  return data.vehicles;
+  return data;
 };
 
 export const getMechanics = async () => {

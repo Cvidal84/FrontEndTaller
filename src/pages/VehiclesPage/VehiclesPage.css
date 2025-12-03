@@ -1,115 +1,160 @@
-/* Layout principal: Lista izquierda + Panel derecho */
 .vehicles-layout {
-    display: flex;
-    height: calc(100vh - 60px); /* Ajusta según tu header */
-    overflow: hidden;
-    background-color: #f4f4f9;
-  }
-  
-  /* --- LISTA IZQUIERDA --- */
-  .vehicles-list {
-    width: 350px; /* Ancho fijo para la lista */
-    background-color: white;
-    border-right: 1px solid #ddd;
-    display: flex;
-    flex-direction: column;
-    padding: 1rem;
-    overflow-y: auto;
-  }
-  
-  .vehicles-list h2 {
-    margin-top: 0;
-    margin-bottom: 1rem;
-    color: #333;
-  }
-  
-  /* Input de búsqueda */
-  .search-input {
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    margin-bottom: 1rem;
-    font-size: 1rem;
-  }
-  
-  /* Lista de items */
-  .vehicles-list-items {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    flex-grow: 1; /* Ocupa el espacio restante */
-  }
-  
-  /* Item individual de vehículo */
-  .vehicle-item {
-    display: flex;
-    align-items: center;
-    padding: 12px;
-    border-bottom: 1px solid #eee;
-    cursor: pointer;
-    transition: background-color 0.2s;
-  }
-  
-  .vehicle-item:hover {
-    background-color: #f9f9f9;
-  }
-  
-  .vehicle-item.active {
-    background-color: #e6f7ff; /* Color de selección (azul claro) */
-    border-left: 4px solid #007bff;
-  }
-  
-  /* Avatar / Icono del vehículo */
-  .vehicle-avatar {
-    width: 40px;
-    height: 40px;
-    background-color: #007bff;
-    color: white;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-weight: bold;
-    margin-right: 12px;
-    flex-shrink: 0;
-  }
-  
-  /* Información principal del item */
-  .vehicle-main {
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-  }
-  
-  .vehicle-plate {
-    font-weight: bold;
-    color: #333;
-  }
-  
-  .vehicle-model {
-    font-size: 0.9rem;
-    color: #666;
-  }
+  display: grid;
+  grid-template-columns: minmax(260px, 320px) 1fr;
+  gap: 1.5rem;
+  height: 100%;
+  overflow: hidden;
+}
 
-  .vehicle-client {
-    font-size: 0.85rem;
-    color: #007bff;
-    margin-top: 2px;
-  }
-  
-  /* --- PANEL DERECHO (DETALLES) --- */
-  .vehicle-details-panel {
-    flex-grow: 1; /* Ocupa el resto del ancho */
-    padding: 2rem;
-    overflow-y: auto;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start; /* Alinea la tarjeta arriba */
-  }
-  
-  /* Mensaje cuando no hay selección */
-  .vehicle-details-panel > p {
-    color: #888;
-    font-size: 1.2rem;
-    margin-top: 3rem;
-  }
+/* --- LISTA IZQUIERDA --- */
+.vehicles-list {
+  background: #ffffff;
+  padding: 1rem;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05);
+
+  display: flex;
+  flex-direction: column;
+  height: 100%; /* Ocupa toda la altura de la celda del grid */
+  box-sizing: border-box; /* Asegura que el padding no rompa la altura */
+  overflow: hidden;
+}
+/* Cabecera donde están el Título y el Botón */
+.vehicles-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.vehicles-list h2 {
+  margin-top: 0;
+  margin-bottom: 0.75rem;
+  flex-shrink: 0;
+  text-align: start;
+}
+
+/* El Botón Circular */
+.add-btn {
+  /* Tamaño fijo igual ancho y alto = Círculo perfecto */
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+
+  /* Centrado del símbolo + */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0; /* Importante: quitar padding del navegador */
+
+  /* Estética */
+  background-color: #007bff;
+  color: white;
+  border: none;
+  font-size: 24px;
+  font-weight: 300; /* Un poco más fino queda más elegante */
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Sombra suave */
+  transition: all 0.2s ease;
+  line-height: 1;
+}
+
+/* Efecto Hover (al pasar el ratón) */
+.add-btn:hover {
+  transform: translateY(-2px); /* Se levanta un poco */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Input de búsqueda */
+.search-input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+  box-sizing: border-box; /* Para que el padding no rompa el ancho */
+  background-color: #dbeafe;
+  color: #213547;
+  flex-shrink: 0;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #1d4ed8;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+}
+
+/* Lista de items */
+.vehicles-list-items {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  flex: 1;
+  overflow-y: auto;
+  min-height: 0;
+}
+
+/* Item individual de vehículo */
+.vehicle-item {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.6rem 0.7rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.15s ease, box-shadow 0.15s ease,
+    transform 0.05s ease;
+  margin-bottom: 0.35rem;
+}
+
+.vehicle-item.active,
+.vehicle-item:hover {
+  background-color: #eff6ff;
+  box-shadow: 0 1px 3px rgba(37, 99, 235, 0.2);
+  transform: translateY(-1px);
+}
+
+/* Avatar / Icono del vehículo */
+.vehicle-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  background-color: #dbeafe;
+  color: #1d4ed8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+}
+
+/* Información principal del item */
+.vehicle-main {
+  display: flex;
+  flex-direction: column;
+}
+
+.vehicle-plate {
+  font-weight: 600;
+  color: #111827;
+}
+
+.vehicle-model {
+  font-size: 0.85rem;
+  color: #4b5563;
+}
+
+.vehicle-client {
+  color: #007bff;
+  font-size: 0.8rem;
+}
+
+/* Panel de detalles a la derecha */
+.vehicle-details {
+  background: #ffffff;
+  padding: 1rem;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05);
+}
